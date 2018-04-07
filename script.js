@@ -1,6 +1,7 @@
 var $titleInput = $('.title-input');
 var $bodyInput = $('.body-input');
 var $saveBtn = $('.save-btn');
+var $ideas = [];
 
 $saveBtn.on('click', addItemToList);
 $('section').on('click', '.delete-button', deleteButtonClicked);
@@ -15,32 +16,119 @@ function buildMarkup(idGen, titleInput, bodyInput) {
        <p contenteditable>${bodyInput}</p>
        <button class = 'upvote-button' aria-label='upvote'></button>
        <button class = 'downvote-button' aria-label = 'downvote' ></button>
-       <h4>quality:<span class='quality' role='quality'>swill</span></h4>
+       <h4>quality: <span class='quality' role='quality'>swill</span></h4>
        <hr>
        </article>`
 };
 
-// function storeNewTitle() {
-//   var 
-// }
+function upVoteClicked(ideaCard, idGen) {
+  var $upvoteButton = $(this);
+  var $currentArticle = $upvoteButton.parent();
+  var $quality = $currentArticle.children('h4').children('.quality');
+  if ($quality.text() ==='swill') {
+    $quality.text('plausible');
+  } else if ($quality.text() === 'plausible') {
+    $quality.text('genius');
+  } else {
+    return
+  } 
+  var stringifyCard = JSON.stringify(ideaCard);
+  localStorage.setItem(idGen, ideaCard);
+ }
+
+
+function downVoteClicked(){
+  var $downvoteButton = $(this);
+  var $currentArticle = $downvoteButton.parent();
+  var $quality = $currentArticle.children('h4').children('.quality');
+  if ($quality.text() === 'genius') {
+    $quality.text('plausible');
+  } else if ($quality.text() === 'plausible') {
+    $quality.text('swill');
+  } else {
+    return
+  } 
+}
 
 function addItemToList(event) {
-	event.preventDefault();
+  event.preventDefault();
   var idGen = Date.now();
   var $deleteButton = $('.delete-button');
   var $title = $titleInput.val();
   var $body = $bodyInput.val();
-	var markUp = buildMarkup(idGen, $title, $body)
-  var $currentArticle = $(markUp);
+  var ideaCard = buildMarkup(idGen, $title, $body)
+  var $currentArticle = $(ideaCard);
   $('section').prepend($currentArticle);
   clearInputs();
-  localStorage.setItem(idGen, markUp);
+  // var ideas = push(ideaCard);
+  localStorage.setItem(idGen, ideaCard);
 };
+
+// function storeQuality() {
+//   var stringifyArticle = JSON.strinfy(ideaCard);
+//   localStorage.setItem(idGen, ideaCard);
+// }
 
 $(document).ready(function(event) {
   for(var i = 0; i < localStorage.length; i++){
-  $('section').append(localStorage.getItem(localStorage.key(i)));
+  $('section').prepend(localStorage.getItem(localStorage.key(i)));
   }  
+
+
+
+
+function updateTitle(key) {
+  $('.changeTitle').on('blur',function(event) {
+  var title = $(this).val();
+  var body = $(this).parent().siblings('p');
+  var ideaCard = buildMarkup(key, title, body);
+  localStorage.setItem(key, ideaCard);
+  });
+}
+
+
+function updateBody(key) {
+  $('.changeContent').on('blur', function(event) {
+  var body = $(this).val();
+  var title = $(this).parent().siblings('h2');
+  var ideaCard = buildMarkup(key, title, body);
+  localStorage.setItem(key, ideaCard);
+  })
+}
+});
+
+function clearInputs() {
+  event.preventDefault();
+  $titleInput.val('');
+  $bodyInput.val('');
+ }
+function deleteButtonClicked (event, idGen) {
+  $(this).parent().remove();
+  localStorage.removeItem(localStorage.key(idGen));
+}
+
+ 
+ // function disableButton(saveBtn) {
+ //  if ($titleInput.val() = "" || $bodyInput.val() = "")
+ //    this.disabled = true; {
+ //  } else {
+ //    this.disabled = false;
+ //  }
+ // }
+
+// $('p').on('click', function(event) {
+//   var newText = $(this).text();
+//   var addInput = `<input type="text" value=${newText} class="changeContent">`;
+//    if ($(this).children().length === 0) {
+//     $(this).text('');
+//     $(this).append(addInput);
+//     $(this).children().focus();
+//     var key = $(this).parent().attr('id');
+//     updateBody(key);
+//   } else {
+//     return
+//   }
+//   });
 
 // $('h2').on('click',function(event) {
 //   var key1 = localStorage.getItem(localStorage.key($(this).parent().attr('id')));
@@ -59,80 +147,8 @@ $(document).ready(function(event) {
 
 // });
 
-function updateTitle(key) {
-  $('.changeTitle').on('blur',function(event) {
-  var title = $(this).val();
-  var body = $(this).parent().siblings('p');
-  var markUp = buildMarkup(key, title, body);
-  localStorage.setItem(key, markUp);
-  });
-}
+// function storeNewTitle() {
+//   var 
+// }
 
-// $('p').on('click', function(event) {
-//   var newText = $(this).text();
-//   var addInput = `<input type="text" value=${newText} class="changeContent">`;
-//    if ($(this).children().length === 0) {
-//     $(this).text('');
-//     $(this).append(addInput);
-//     $(this).children().focus();
-//     var key = $(this).parent().attr('id');
-//     updateBody(key);
-//   } else {
-//     return
-//   }
-//   });
 
-function updateBody(key) {
-  $('.changeContent').on('blur', function(event) {
-  var body = $(this).val();
-  var title = $(this).parent().siblings('h2');
-  var markUp = buildMarkup(key, title, body);
-  localStorage.setItem(key, markUp);
-  })
-}
-});
-
-function upVoteClicked(event) {
-	var $upvoteButton = $(event.target);
-  var $currentArticle = $upvoteButton.parent();
-	var $quality = $currentArticle.children('h4').children('.quality');
- 	if ($quality.text() ==='swill') {
- 		$quality.text('plausible');
- 	} else if ($quality.text() === 'plausible') {
- 		$quality.text('genius');
- 	} else {
- 		return
- 	} 
- }
-
- // function disableButton(saveBtn) {
- //  if ($titleInput.val() = "" || $bodyInput.val() = "")
- //    this.disabled = true; {
- //  } else {
- //    this.disabled = false;
- //  }
- // }
-
-function downVoteClicked(event){
-	var $downvoteButton = $(event.target);
-  var $currentArticle = $downvoteButton.parent();
-  var $quality = $currentArticle.children('h4').children('.quality');
- 	if ($quality.text() === 'genius') {
- 		$quality.text('plausible');
- 	} else if ($quality.text() === 'plausible') {
- 		$quality.text('swill');
- 	} else {
- 		return
- 	} 
-}
-
-function deleteButtonClicked (event, idGen) {
-	$(this).parent().remove();
-  localStorage.removeItem(localStorage.key(idGen));
-}
-
-function clearInputs() {
-  event.preventDefault();
-  $titleInput.val('');
-  $bodyInput.val('');
-}
