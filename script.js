@@ -16,10 +16,6 @@ function updateTitleLS(e) {
   }
 }
 
-
-
-// $('section').on('blur', 'h2', storeNewTitle);
-
 function buildMarkup(idGen, titleInput, bodyInput) {
      return `<article id=${idGen}>
       <button class = 'delete-button'></button>
