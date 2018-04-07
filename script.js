@@ -6,13 +6,18 @@ $saveBtn.on('click', addItemToList);
 $('section').on('click', '.delete-button', deleteButtonClicked);
 $('section').on('click', '.upvote-button', upVoteClicked);
 $('section').on('click', '.downvote-button', downVoteClicked);
+
 // $('section').on('blur', 'h2', storeNewTitle);
+
+
+
 
 function buildMarkup(idGen, titleInput, bodyInput) {
      return `<article id=${idGen}>
       <button class = 'delete-button'></button>
       <h2 contenteditable>${titleInput}</h2>
        <p contenteditable>${bodyInput}</p>
+
        <button class = 'upvote-button' aria-label='upvote'></button>
        <button class = 'downvote-button' aria-label = 'downvote' ></button>
        <h4>quality:<span class='quality' role='quality'>swill</span></h4>
