@@ -7,33 +7,29 @@ $saveBtn.on('click', addItemToList);
 $('section').on('click', '.delete-button', deleteButtonClicked);
 $('section').on('click', '.upvote-button', upVoteClicked);
 $('section').on('click', '.downvote-button', downVoteClicked);
-<<<<<<< HEAD
 // $('section').on('blur', 'h2', storeNewTitle);
-=======
-
-// $('section').on('blur', 'h2', storeNewTitle);
-
-
-
->>>>>>> master
 
 function buildMarkup(idGen, titleInput, bodyInput) {
      return `<article id=${idGen}>
       <button class = 'delete-button'></button>
       <h2 contenteditable>${titleInput}</h2>
        <p contenteditable>${bodyInput}</p>
-<<<<<<< HEAD
-=======
-
->>>>>>> master
        <button class = 'upvote-button' aria-label='upvote'></button>
        <button class = 'downvote-button' aria-label = 'downvote' ></button>
-       <h4>quality: <span class='quality' role='quality'>swill</span></h4>
+       <h4>quality: <span class='quality' role='quality'> swill</span></h4>
        <hr>
        </article>`
 };
 
-function upVoteClicked(ideaCard, idGen) {
+function Card(titleInput, bodyInput) {
+  this.title = title;
+  this.body = body;
+  this.id = Date.now();
+  this.quality = quality.text || 'swill';
+
+}
+
+function upVoteClicked(ideaCard, idGen, storedQuality) {
   var $upvoteButton = $(this);
   var $currentArticle = $upvoteButton.parent();
   var $quality = $currentArticle.children('h4').children('.quality');
@@ -45,14 +41,14 @@ function upVoteClicked(ideaCard, idGen) {
     return
   } 
   var stringifyCard = JSON.stringify(ideaCard);
-  localStorage.setItem(idGen, ideaCard);
+  localStorage.setItem(key, storedQuality.text);
  }
 
 
-function downVoteClicked(){
+function downVoteClicked(ideaCard, idGen, storedQuality) {
   var $downvoteButton = $(this);
   var $currentArticle = $downvoteButton.parent();
-  var $quality = $currentArticle.children('h4').children('.quality');
+  var $quality = $currentArticle.child('.quality');
   if ($quality.text() === 'genius') {
     $quality.text('plausible');
   } else if ($quality.text() === 'plausible') {
@@ -60,6 +56,8 @@ function downVoteClicked(){
   } else {
     return
   } 
+   var stringifyCard = JSON.stringify(ideaCard);
+  localStorage.setItem(idGen, quality.text);
 }
 
 function addItemToList(event) {
@@ -68,6 +66,7 @@ function addItemToList(event) {
   var $deleteButton = $('.delete-button');
   var $title = $titleInput.val();
   var $body = $bodyInput.val();
+ 
   var ideaCard = buildMarkup(idGen, $title, $body)
   var $currentArticle = $(ideaCard);
   $('section').prepend($currentArticle);
@@ -114,50 +113,52 @@ function clearInputs() {
   $titleInput.val('');
   $bodyInput.val('');
  }
+
 function deleteButtonClicked (event, idGen) {
   $(this).parent().remove();
   localStorage.removeItem(localStorage.key(idGen));
 }
 
  
- // function disableButton(saveBtn) {
- //  if ($titleInput.val() = "" || $bodyInput.val() = "")
- //    this.disabled = true; {
- //  } else {
- //    this.disabled = false;
- //  }
- // }
+ function disableButton(saveBtn,event) {
+  event.preventDefault();
+  if ($titleInput.val() === '' || $bodyInput.val() === '')
+    saveBtn.disabled = true; {
+  } else {
+    saveBtn.disabled = false;
+  }
+ }
 
-// $('p').on('click', function(event) {
-//   var newText = $(this).text();
-//   var addInput = `<input type="text" value=${newText} class="changeContent">`;
-//    if ($(this).children().length === 0) {
-//     $(this).text('');
-//     $(this).append(addInput);
-//     $(this).children().focus();
-//     var key = $(this).parent().attr('id');
-//     updateBody(key);
-//   } else {
-//     return
-//   }
-//   });
+$('p').on('click', function(event) {
+  var newText = $(this).text();
+  var addInput = `<input type="text" value=${newText} class="changeContent">`;
+   if ($(this).children().length === 0) {
+    $(this).text('');
+    $(this).append(addInput);
+    $(this).children().focus();
+    var key = $(this).parent().attr('id');
+    updateBody(key);
+  } else {
+    return
+  }
+  });
 
-// $('h2').on('click',function(event) {
-//   var key1 = localStorage.getItem(localStorage.key($(this).parent().attr('id')));
-//   console.log(key1);
-//   var newText = $(this).text();
-//   var addInput = `<input type="text" value=${newText} class="changeTitle">`;
-//   if ($(this).children().length === 0) {
-//     $(this).text('');
-//     $(this).append(addInput);
-//     $(this).children().focus();
-//     var key = $(this).parent().attr('id');
-//     updateTitle(key);
-//   } else {
-//     return
-//   }
+$('h2').on('click',function(event) {
+  var key1 = localStorage.getItem(localStorage.key($(this).parent().attr('id')));
+  console.log(key1);
+  var newText = $(this).text();
+  var addInput = `<input type="text" value=${newText} class="changeTitle">`;
+  if ($(this).children().length === 0) {
+    $(this).text('');
+    $(this).append(addInput);
+    $(this).children().focus();
+    var key = $(this).parent().attr('id');
+    updateTitle(key);
+  } else {
+    return
+  }
 
-// });
+});
 
 // function storeNewTitle() {
 //   var 
