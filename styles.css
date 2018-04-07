@@ -52,8 +52,8 @@ hr {
   width: 100%;
 }
 
-.idea-title,
-.body,
+.title-input,
+.body-input,
 .search {
   color: #939598;
   font-weight: 700;
@@ -62,11 +62,11 @@ hr {
   width: 55%;
 }
 
-.body {
+.body-input {
   margin-top: 1%;
 }
 
-.save {
+.save-btn {
   background-color: #00A79D;
   color: white;
   margin: 2% 0 3% 0;
@@ -74,7 +74,7 @@ hr {
   width: 56%;
 }
 
-.save:hover {
+.save-btn:hover {
   background-color: #045E55;
 }
 
