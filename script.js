@@ -1,14 +1,15 @@
 var $titleInput = $('.title-input');
 var $bodyInput = $('.body-input');
-var $saveBtn = $('.save-btn');
-var $ideas = [];
+// var $saveBtn = $('.save-btn');
+// var $ideas = [];
 
-$saveBtn.on('click', createIdea);
+$('.save-btn').on('click', createIdea);
+
 $('section').on('click', '.delete-button', deleteButtonClicked);
 $('section').on('click', '.upvote-button', upVoteClicked);
 $('section').on('click', '.downvote-button', downVoteClicked);
 $('.idea-container').on('click', '.title-input, .body-input', editableTrue);
-$('.idea-container').on('keydown blur', '.title-input', updateTitleLS);
+// $('.idea-container').on('keydown blur', '.title-input', updateTitleLS);
 
 function updateTitleLS(e) {
   if (e.keyCode == 13) {
@@ -16,16 +17,17 @@ function updateTitleLS(e) {
   }
 }
 
-function buildMarkup(idGen, titleInput, bodyInput) {
-     return `<article id=${idGen}>
+function prependCard(ideaCard) {
+   return $('.idea-container').prepend(
+     `<article id=${ideaCard.id}>
       <button class = 'delete-button'></button>
-      <h2 class="title-input" contenteditable="false">${titleInput}</h2>
-       <p class="body-input" contenteditable="false">${bodyInput}</p>
+      <h2 class="title-input" contenteditable="false">${ideaCard.title}</h2>
+       <p class="body-input" contenteditable="false">${ideaCard.body}</p>
        <button class = 'upvote-button' aria-label='upvote'></button>
        <button class = 'downvote-button' aria-label = 'downvote' ></button>
-       <h4>quality: <span class='quality' role='quality'> swill</span></h4>
+       <h4>quality: <span class='quality' role='quality'>${ideaCard.quality}</span></h4>
        <hr>
-       </article>`
+       </article>`)
 };
 
 function editableTrue() {
@@ -42,11 +44,11 @@ function Card(titleInput, bodyInput) {
 }
 
 
-function createIdea() {
+function createIdea(event) {
   event.preventDefault();
-  var $deleteButton = $('.delete-button'); 
+  // var $deleteButton = $('.delete-button'); 
   var ideaCard = new Card($titleInput.val(), $bodyInput.val());
-  $('.idea-container').prepend(ideaCard);
+  prependCard(ideaCard);
   clearInputs();
   saveIdea(ideaCard);
   // var ideas = push(ideaCard);
@@ -80,7 +82,7 @@ function upVoteClicked(ideaCard, idGen, storedQuality) {
 
 
 function downVoteClicked(ideaCard, idGen, storedQuality) {
-  var $downvoteButton = $(this);
+  var $downvoteButton = $(this);kb
   var $currentArticle = $downvoteButton.parent();
   var $quality = $currentArticle.children('.quality');
   if ($quality.text() === 'genius') {
@@ -100,10 +102,19 @@ function downVoteClicked(ideaCard, idGen, storedQuality) {
 //   localStorage.setItem(idGen, ideaCard);
 // }
 
-$(document).ready(function(event) {
+// $(document).ready(function(event) {
+//   for(var i = 0; i < localStorage.length; i++){
+//   $('section').prepend(localStorage.getItem(localStorage.key(i)));
+//   }  
+
+  function prependIdeas() {
+// $( document ).ready(function(event) {
   for(var i = 0; i < localStorage.length; i++){
-  $('section').prepend(localStorage.getItem(localStorage.key(i)));
+  var parsedIdeas = parse(localStorage.getItem(localStorage.key(i)));
+  $('section').prepend(parsedIdeas);
   }  
+
+  prependIdeas();
 
 
 // function updateTitle(event) {
@@ -116,7 +127,7 @@ $(document).ready(function(event) {
 //   $('.changeTitle').on('blur',function(event) {
 //   var title = $(this).val();
 //   var body = $(this).parent().siblings('p');
-//   var ideaCard = buildMarkup(key, title, body);
+//   var ideaCard = createIdea(key, title, body);
 //   localStorage.setItem(key, ideaCard);
 //   });
 // }
@@ -126,11 +137,11 @@ function updateBody(key) {
   $('.changeContent').on('blur', function(event) {
   var body = $(this).val();
   var title = $(this).parent().siblings('h2');
-  var ideaCard = buildMarkup(key, title, body);
+  var ideaCard = createIdea(key, title, body);
   localStorage.setItem(key, ideaCard);
   })
 }
-});
+};
 
 function clearInputs() {
   $titleInput.val('');
