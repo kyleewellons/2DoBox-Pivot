@@ -52,8 +52,8 @@ hr {
   width: 100%;
 }
 
-.title-input,
-.body-input,
+.task-title-input,
+.task-body-input,
 .search {
   color: #939598;
   font-weight: 700;
@@ -81,6 +81,7 @@ hr {
 .search {
   margin: 2% auto;
 }
+
 
 .delete-button {
 	background: url('images/delete.svg');
