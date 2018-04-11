@@ -1,14 +1,17 @@
+loadPage();
+
 var $titleInput = $('.title-input');
 var $bodyInput = $('.body-input');
-var $saveBtn = $('.save-btn');
-var $ideas = [];
+// var $saveBtn = $('.save-btn');
+// var $ideas = [];
 
-$saveBtn.on('click', createIdea);
+$('.save-btn').on('click', createIdea);
+
 $('section').on('click', '.delete-button', deleteButtonClicked);
 $('section').on('click', '.upvote-button', upVoteClicked);
 $('section').on('click', '.downvote-button', downVoteClicked);
 $('.idea-container').on('click', '.title-input, .body-input', editableTrue);
-$('.idea-container').on('keydown blur', '.title-input', updateTitleLS);
+// $('.idea-container').on('keydown blur', '.title-input', updateTitleLS);
 
 function updateTitleLS(e) {
   if (e.keyCode == 13) {
@@ -16,20 +19,17 @@ function updateTitleLS(e) {
   }
 }
 
-
-
-// $('section').on('blur', 'h2', storeNewTitle);
-
-function buildMarkup(idGen, titleInput, bodyInput) {
-     return `<article id=${idGen}>
+function prependCard(ideaCard) {
+   return $('.idea-container').prepend(
+     `<article id=${ideaCard.id}>
       <button class = 'delete-button'></button>
-      <h2 class="title-input" contenteditable="false">${titleInput}</h2>
-       <p class="body-input" contenteditable="false">${bodyInput}</p>
+      <h2 class="title-input" contenteditable="false">${ideaCard.title}</h2>
+       <p class="body-input" contenteditable="false">${ideaCard.body}</p>
        <button class = 'upvote-button' aria-label='upvote'></button>
        <button class = 'downvote-button' aria-label = 'downvote' ></button>
-       <h4>quality: <span class='quality' role='quality'> swill</span></h4>
+       <h4>quality: <span class='quality' role='quality'>${ideaCard.quality}</span></h4>
        <hr>
-       </article>`
+       </article>`)
 };
 
 function editableTrue() {
@@ -37,38 +37,34 @@ function editableTrue() {
   $('.body-input').attr("contenteditable", "true");
 }
 
-function saveIdeaTitle() {
-
+function loadPage() {
+  for (var i = 0; i < localStorage.length; i++) {
+    var parsedCard = JSON.parse(localStorage.getItem(localStorage.key(i)));
+    prependCard(parsedCard);
+  }
 }
 
 function Card(titleInput, bodyInput) {
   this.title = titleInput;
   this.body = bodyInput;
   this.id = Date.now();
-  // this.quality = quality.text || 'swill';
   this.quality = 'swill';
-
 }
+
 
 function createIdea(event) {
   event.preventDefault();
-  var idGen = Date.now();
-  var $deleteButton = $('.delete-button');
-  // var $title = $titleInput.val();
-  // var $body = $bodyInput.val();
- 
   var ideaCard = new Card($titleInput.val(), $bodyInput.val());
- 
-  // var $currentArticle = $(ideaCard);
-  $('section').prepend(ideaCard);
+  prependCard(ideaCard);
   clearInputs();
-  saveIdea();
-  // var ideas = push(ideaCard);
+  saveToLocalStorage(ideaCard);
 };
 
-function saveIdea() {
-  localStorage.setItem(idGen, ideaCard);
-
+function saveToLocalStorage(ideaCard) {
+  var key = ideaCard.id;
+  var stringifiedKey = JSON.stringify(key)
+  var stringifiedIdea = JSON.stringify(ideaCard)
+  localStorage.setItem(stringifiedKey, stringifiedIdea);
 }
 
 function upVoteClicked(ideaCard, idGen, storedQuality) {
@@ -106,12 +102,15 @@ function downVoteClicked(ideaCard, idGen, storedQuality) {
 // function storeQuality() {
 //   var stringifyArticle = JSON.strinfy(ideaCard);
 //   localStorage.setItem(idGen, ideaCard);
-// }
+// } 
 
-$(document).ready(function(event) {
-  for(var i = 0; i < localStorage.length; i++){
-  $('section').prepend(localStorage.getItem(localStorage.key(i)));
-  }  
+//   function prependIdeas() {
+// // $( document ).ready(function(event) {
+//   for(var i = 0; i < localStorage.length; i++){
+//   var parsedIdeas = parse(localStorage.getItem(localStorage.key(i)));
+//   $('section').prepend(parsedIdeas);
+//   }  
+
 
 
 // function updateTitle(event) {
@@ -124,7 +123,7 @@ $(document).ready(function(event) {
 //   $('.changeTitle').on('blur',function(event) {
 //   var title = $(this).val();
 //   var body = $(this).parent().siblings('p');
-//   var ideaCard = buildMarkup(key, title, body);
+//   var ideaCard = createIdea(key, title, body);
 //   localStorage.setItem(key, ideaCard);
 //   });
 // }
@@ -134,11 +133,10 @@ function updateBody(key) {
   $('.changeContent').on('blur', function(event) {
   var body = $(this).val();
   var title = $(this).parent().siblings('h2');
-  var ideaCard = buildMarkup(key, title, body);
+  var ideaCard = createIdea(key, title, body);
   localStorage.setItem(key, ideaCard);
   })
-}
-});
+};
 
 function clearInputs() {
   $titleInput.val('');
@@ -150,49 +148,37 @@ function deleteButtonClicked (event, idGen) {
   localStorage.removeItem(localStorage.key(idGen));
 }
 
- 
- // function disableButton(saveBtn,event) {
- //  event.preventDefault();
- //  if ($titleInput.val() === '' || $bodyInput.val() === '')
- //    saveBtn.disabled = true; {
- //  } else {
- //    saveBtn.disabled = false;
- //  }
- // }
+// $('p').on('click', function(event) {
+//   var newText = $(this).text();
+//   var addInput = `<input type="text" value=${newText} class="changeContent">`;
+//    if ($(this).children().length === 0) {
+//     $(this).text('');
+//     $(this).append(addInput);
+//     $(this).children().focus();
+//     var key = $(this).parent().attr('id');
+//     updateBody(key);
+//   } else {
+//     return
+//   }
+//   });
 
-$('p').on('click', function(event) {
-  var newText = $(this).text();
-  var addInput = `<input type="text" value=${newText} class="changeContent">`;
-   if ($(this).children().length === 0) {
-    $(this).text('');
-    $(this).append(addInput);
-    $(this).children().focus();
-    var key = $(this).parent().attr('id');
-    updateBody(key);
-  } else {
-    return
-  }
-  });
+// $('h2').on('click',function(event) {
+//   var key1 = localStorage.getItem(localStorage.key($(this).parent().attr('id')));
+//   console.log(key1);
+//   var newText = $(this).text();
+//   var addInput = `<input type="text" value=${newText} class="changeTitle">`;
+//   if ($(this).children().length === 0) {
+//     $(this).text('');
+//     $(this).append(addInput);
+//     $(this).children().focus();
+//     var key = $(this).parent().attr('id');
+//     updateTitle(key);
+//   } else {
+//     return
+//   }
 
-$('h2').on('click',function(event) {
-  var key1 = localStorage.getItem(localStorage.key($(this).parent().attr('id')));
-  console.log(key1);
-  var newText = $(this).text();
-  var addInput = `<input type="text" value=${newText} class="changeTitle">`;
-  if ($(this).children().length === 0) {
-    $(this).text('');
-    $(this).append(addInput);
-    $(this).children().focus();
-    var key = $(this).parent().attr('id');
-    updateTitle(key);
-  } else {
-    return
-  }
+// });
 
-});
 
-// function storeNewTitle() {
-//   var 
-// }
 
 
