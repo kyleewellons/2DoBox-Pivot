@@ -4,7 +4,7 @@ var $titleInput = $('.task-title-input');
 var $bodyInput = $('.task-body-input');
 var $searchInput = $('.search');
 
-
+$('.idea-container').on('keyup', '.title-input',updateTitleLS);
 $('.save-btn').on('click', createIdea);
 $('.search').on('keydown', searchIdeas);
 $('section').on('click', '.delete-button', deleteButtonClicked);
@@ -14,7 +14,7 @@ $('.idea-container').on('click', '.title-input, .body-input', editableTrue);
 $('.idea-container').on('blur', '.title-input', updateTitle);
 $('.idea-container').on('blur', '.body-input', updateBody);
 
-function updateTitle() {
+function updateTitle(e) {
   var title = $(this).text();
   var updatedCardId = $(this).parent().attr('id');
   var card = JSON.parse(localStorage.getItem(updatedCardId));
@@ -30,15 +30,28 @@ function updateBody() {
   saveToLocalStorage(card);
 };
 
+
   function saveToLocalStorage(ideaCard) {
   var key = ideaCard.id;
   var stringifiedIdea = JSON.stringify(ideaCard)
   localStorage.setItem(key, stringifiedIdea);
 }
 
+function clearInputs() {
+  $titleInput.val('');
+  $bodyInput.val('');
+
+  if ($('.task-title-input').val() && $('.task-body-input').val()) {
+      $('.save-btn').prop('disabled', false);
+     } else {
+      $('.save-btn').prop('disabled', true);
+     }
+ }
 
 function updateTitleLS(e) {
-  if (e.keyCode == 13) {
+  if (e.keyCode === 13) {
+    e.preventDefault();
+    $titleInput.focus()
   }
 }
 
@@ -110,10 +123,7 @@ function downVoteClicked(ideaCard, idGen, storedQuality) {
   saveToLocalStorage(card);
   } 
 
-function clearInputs() {
-  $titleInput.val('');
-  $bodyInput.val('');
- }
+
 
 function deleteButtonClicked (event, idGen) {
   $(this).parent().remove();
