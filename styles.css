@@ -116,6 +116,18 @@ hr {
   background-image: url('images/downvote-hover.svg');
 }
 
+.task-btn {
+  background-color: #00A79D;
+  color: white;
+  float: right;
+  height: 3.5rem;
+  width: 3.5rem;
+}
+
+.task-complete  {
+background-color: grey;
+
+}
 @media only screen and (max-width:600px) {
   .body{
     padding-bottom: 8%;
