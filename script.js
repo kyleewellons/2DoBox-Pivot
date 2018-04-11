@@ -5,7 +5,7 @@ var $bodyInput = $('.task-body-input');
 var $searchInput = $('.search');
 
 $('.idea-container').on('keyup', '.title-input',updateTitleLS);
-$('.save-btn').on('click', createIdea);
+$('.save-btn').on('click', createIdea,);
 $('.search').on('keydown', searchIdeas);
 $('section').on('click', '.delete-button', deleteButtonClicked);
 $('section').on('click', '.upvote-button', upVoteClicked);
@@ -13,6 +13,13 @@ $('section').on('click', '.downvote-button', downVoteClicked);
 $('.idea-container').on('click', '.title-input, .body-input', editableTrue);
 $('.idea-container').on('blur', '.title-input', updateTitle);
 $('.idea-container').on('blur', '.body-input', updateBody);
+$('section').on('click', '.task-btn', completedTask);
+
+
+
+// $('.task-complete').on('click')
+
+
 
 function updateTitle(e) {
   var title = $(this).text();
@@ -57,13 +64,14 @@ function updateTitleLS(e) {
 
 function prependCard(ideaCard) {
    return $('.idea-container').prepend(
-     `<article id=${ideaCard.id}>
+     `<article class="new-task" id=${ideaCard.id}>
       <button class = 'delete-button'></button>
       <h2 class="title-input" contenteditable="false">${ideaCard.title}</h2>
        <p class="body-input" contenteditable="false">${ideaCard.body}</p>
        <button class = 'upvote-button' aria-label='upvote'></button>
        <button class = 'downvote-button' aria-label = 'downvote' ></button>
        <h4>quality: <span class='quality' role='quality'>${ideaCard.quality}</span></h4>
+       <button class="task-btn">Completed Task</button>
        <hr>
        </article>`)
 };
@@ -145,6 +153,10 @@ function searchIdeas() {
 
 
 
+function completedTask(){
+
+  $(this).parent('article').toggleClass('task-complete')
+};
 
 
 
