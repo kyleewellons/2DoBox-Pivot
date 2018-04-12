@@ -15,11 +15,10 @@ $('.idea-container').on('blur', '.title-input', updateTitle);
 $('.idea-container').on('blur', '.body-input', updateBody);
 $('section').on('click', '.task-btn', completedTask);
 
-
-
-// $('.task-complete').on('click')
-
-
+function clearInputs() {
+  $titleInput.val('');
+  $bodyInput.val('');
+ }
 
 function updateTitle(e) {
   var title = $(this).text();
@@ -37,23 +36,11 @@ function updateBody() {
   saveToLocalStorage(card);
 };
 
-
-  function saveToLocalStorage(ideaCard) {
+function saveToLocalStorage(ideaCard) {
   var key = ideaCard.id;
   var stringifiedIdea = JSON.stringify(ideaCard)
   localStorage.setItem(key, stringifiedIdea);
 }
-
-function clearInputs() {
-  $titleInput.val('');
-  $bodyInput.val('');
-
-  if ($('.task-title-input').val() && $('.task-body-input').val()) {
-      $('.save-btn').prop('disabled', false);
-     } else {
-      $('.save-btn').prop('disabled', true);
-     }
- }
 
 function updateTitleLS(e) {
   if (e.keyCode === 13) {
@@ -111,8 +98,8 @@ function upVoteClicked(ideaCard, idGen, storedQuality) {
   } else if ($quality.text() === 'plausible') {
     $quality.text('genius');
   }  
-  var updatedCardId = $(this).parent().attr('id');
-  var card = JSON.parse(localStorage.getItem(updatedCardId));
+  // var updatedCardId = $(this).parent().attr('id');
+  var card = JSON.parse(localStorage.getItem($(this).parent().attr('id')));
   card.quality = $quality.text();
   saveToLocalStorage(card);
  }
@@ -125,8 +112,8 @@ function downVoteClicked(ideaCard, idGen, storedQuality) {
   } else if ($quality.text() === 'plausible') {
     $quality.text('swill');
   } 
-  var updatedCardId = $(this).parent().attr('id');
-  var card = JSON.parse(localStorage.getItem(updatedCardId));
+  // var updatedCardId = $(this).parent().attr('id');
+  var card = JSON.parse(localStorage.getItem($(this).parent().attr('id')));
   card.quality = $quality.text();
   saveToLocalStorage(card);
   } 
@@ -151,11 +138,9 @@ function searchIdeas() {
 };
 
 
-
-
-function completedTask(){
-
+function completedTask() {
   $(this).parent('article').toggleClass('task-complete')
+  
 };
 
 
