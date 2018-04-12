@@ -98,7 +98,7 @@ function upVoteClicked(ideaCard, idGen, storedQuality) {
   } else if ($quality.text() === 'plausible') {
     $quality.text('genius');
   }  
-  // var updatedCardId = $(this).parent().attr('id');
+  
   var card = JSON.parse(localStorage.getItem($(this).parent().attr('id')));
   card.quality = $quality.text();
   saveToLocalStorage(card);
@@ -112,7 +112,7 @@ function downVoteClicked(ideaCard, idGen, storedQuality) {
   } else if ($quality.text() === 'plausible') {
     $quality.text('swill');
   } 
-  // var updatedCardId = $(this).parent().attr('id');
+
   var card = JSON.parse(localStorage.getItem($(this).parent().attr('id')));
   card.quality = $quality.text();
   saveToLocalStorage(card);
