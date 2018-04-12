@@ -103,7 +103,7 @@ hr {
 }
 
 .upvote-button:hover {
-	background-image: url('images/upvote-hover.svg');
+  background-image: url('images/upvote-hover.svg');
 }
 
 .downvote-button {
